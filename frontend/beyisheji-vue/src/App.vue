@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-link to='/'>首页</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,6 +8,9 @@
 
 export default {
   name: 'App',
+  mounted(){
+    console.log(this.axios);
+  }
 }
 </script>
 
