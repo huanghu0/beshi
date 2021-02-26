@@ -1,21 +1,31 @@
 package com.bishe.pojo;
 
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Component
+@Data
 public class User {
-    public String name;
-    public int age;
-    public int sex;
+    private int id;
+    private String name;
+    private String sex;
+    private int age;
 
     public User() {
     }
 
-//    public User(String name, int age, int sex) {
-//        this.name = name;
-//        this.age = age;
-//        this.sex = sex;
-//    }
+    public User(int id, String name, String sex, int age) {
+        this.id = id;
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -25,28 +35,19 @@ public class User {
         this.name = name;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public int getAge() {
         return age;
     }
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", sex=" + sex +
-                '}';
     }
 }
