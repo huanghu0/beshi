@@ -7,16 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+
 @Controller
 public class HelloWorldController2 {
-//    @Autowired
-//    private User user;
-//    @RequestMapping("/index")
-//    public String index(Model model){
-//        user.setSex(9);
-//        user.setAge(22);
-//        user.setName("黄虎");
-//        model.addAttribute(user);
-//        return "index";
-//    }
+    @Autowired
+    private User user;
+    @RequestMapping("/index")
+    public String index(Model model){
+        user.setSex("m");
+        user.setAge(22);
+        user.setName("黄虎");
+        model.addAttribute(user);
+        return "index";
+    }
 }
