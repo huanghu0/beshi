@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-@Mapper
-@Repository
+//
+//@Mapper
+//@Repository
 public interface Usermapper {
     List<User> queryUserList();
     User queryUserById(int id);
