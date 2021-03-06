@@ -8,11 +8,12 @@
 
 export default {
   name: 'App',
-  mounted(){
-    console.log(this.axios);
-  }
 }
 </script>
 
 <style>
+#app{
+  width: 1536px;
+  height: 722px;
+}
 </style>
