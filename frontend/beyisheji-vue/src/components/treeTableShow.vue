@@ -22,7 +22,7 @@
           </a-menu>
         </a-layout-sider>
         <a-layout-content :style="{ padding: '0 12px', minHeight: '280px' }">
-          <a-table :columns="columns" :data-source="data">
+          <a-table :columns="columns" :data-source="data" :pagination="false">
             <a slot="name" slot-scope="text">{{ text }}</a>
           </a-table>
         </a-layout-content>
@@ -33,39 +33,39 @@
 <script>
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    scopedSlots: { customRender: "name" },
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
-    width: 80,
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address 1",
+    title: "节点编号",
+    dataIndex: "productnodenumber",
+    key: "productnodenumber",
     ellipsis: true,
   },
   {
-    title: "Long Column Long Column Long Column",
-    dataIndex: "address",
-    key: "address 2",
+    title: "产品编号",
+    dataIndex: "productnumber",
+    key: "productnumber",
     ellipsis: true,
   },
   {
-    title: "Long Column Long Column",
-    dataIndex: "address",
-    key: "address 3",
+    title: "父节点编号",
+    dataIndex: "parentnodenumber",
+    key: "parentnodenumber",
     ellipsis: true,
   },
   {
-    title: "Long Column",
-    dataIndex: "address",
-    key: "address 4",
+    title: "节点名称",
+    dataIndex: "productnodename",
+    key: "productnodename",
+    ellipsis: true,
+  },
+  {
+    title: "节点左值",
+    dataIndex: "lft",
+    key: "lft",
+    ellipsis: true,
+  },
+  {
+    title: "节点右值",
+    dataIndex: "rht",
+    key: "rht",
     ellipsis: true,
   },
 ];
@@ -73,24 +73,21 @@ const columns = [
 const data = [
   {
     key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park, New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
+    productnodenumber: "HC0001",
+    productnumber: "HC0001",
+    parentnodenumber: null,
+    productnodename: "火车",
+    lft: 1,
+    rht: 4,
   },
   {
     key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 2 Lake Park, London No. 2 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
+    productnodenumber: "HC000101",
+    productnumber: "HC0001",
+    parentnodenumber: "HC0001",
+    productnodename: "火车头",
+    lft: 2,
+    rht: 3,
   },
 ];
 export default {
