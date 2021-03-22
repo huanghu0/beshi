@@ -1,96 +1,44 @@
 <template>
-  <a-form-model ref="ruleForm" :model="ruleForm" :rules="rules" v-bind="layout">
-    <a-form-model-item has-feedback label="Password" prop="pass">
-      <a-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+  <a-form-model>
+    <a-form-model-item label="产品节点编号">
+      <a-input />
     </a-form-model-item>
-    <a-form-model-item has-feedback label="Confirm" prop="checkPass">
-      <a-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
+    <a-form-model-item label="产品模板编号">
+      <a-input />
     </a-form-model-item>
-    <a-form-model-item has-feedback label="Age" prop="age">
-      <a-input v-model.number="ruleForm.age" />
+    <a-form-model-item label="父节点编号">
+      <a-input />
     </a-form-model-item>
-    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" @click="submitForm('ruleForm')">
-        Submit
-      </a-button>
-      <a-button style="margin-left: 10px" @click="resetForm('ruleForm')">
-        Reset
-      </a-button>
+    <a-form-model-item label="产品节点名称">
+      <a-input />
+    </a-form-model-item>
+    <a-form-model-item label="节点左值">
+      <a-input placeholder="节点左值比节点右值小1" />
+    </a-form-model-item>
+    <a-form-model-item label="节点右值">
+      <a-input placeholder="节点右值比节点左值大1" />
+    </a-form-model-item>
+    <a-form-model-item>
+      <a-button type="primary"> Submit </a-button>
     </a-form-model-item>
   </a-form-model>
 </template>
 <script>
 export default {
-  name:'createProductNode',
+  name: "createProductNode",
   data() {
-    let checkPending;
-    let checkAge = (rule, value, callback) => {
-      clearTimeout(checkPending);
-      if (!value) {
-        return callback(new Error('Please input the age'));
-      }
-      checkPending = setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error('Please input digits'));
-        } else {
-          if (value < 18) {
-            callback(new Error('Age must be greater than 18'));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
-    };
-    let validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input the password'));
-      } else {
-        if (this.ruleForm.checkPass !== '') {
-          this.$refs.ruleForm.validateField('checkPass');
-        }
-        callback();
-      }
-    };
-    let validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input the password again'));
-      } else if (value !== this.ruleForm.pass) {
-        callback(new Error("Two inputs don't match!"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      ruleForm: {
-        pass: '',
-        checkPass: '',
-        age: '',
-      },
-      rules: {
-        pass: [{ validator: validatePass, trigger: 'change' }],
-        checkPass: [{ validator: validatePass2, trigger: 'change' }],
-        age: [{ validator: checkAge, trigger: 'change' }],
-      },
-      layout: {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 14 },
-      },
-    };
-  },
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
+    return {};
   },
 };
 </script>
+<style scoped>
+.ant-form {
+  position: relative;
+  left: -345px;
+  margin-left: 50%;
+  width: 50%;
+}
+.ant-row.ant-form-item {
+  margin-bottom: 0;
+}
+</style>

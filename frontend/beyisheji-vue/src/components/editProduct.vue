@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: "createProduct",
+  name: "editProduct",
   data() {
     return {};
   },
