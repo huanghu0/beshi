@@ -28,7 +28,7 @@ class SpringbootBisheBackendApplicationTests {
     void testRedisUtil(){
         redisUtil.set("name","huanghu");
         System.out.println(redisUtil.get("name"));
-    }
+}
     @Test
     void contextLoads() throws SQLException {
 //        user.setName("黄虎");

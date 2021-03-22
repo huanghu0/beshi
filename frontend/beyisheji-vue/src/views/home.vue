@@ -11,9 +11,15 @@
           <router-link to="createProduct">创建产品</router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <router-link to="tableShow">表格呈现</router-link>
+          <router-link to="createProductNode">创建产品节点</router-link>
         </a-menu-item>
         <a-menu-item key="3">
+          <router-link to="editProductNode">编辑产品节点</router-link>
+        </a-menu-item>
+        <a-menu-item key="4">
+          <router-link to="tableShow">表格呈现</router-link>
+        </a-menu-item>
+        <a-menu-item key="5">
           <router-link to="treeQuickShow">树状快速呈现</router-link>
         </a-menu-item>
       </a-menu>
@@ -32,10 +38,5 @@
   background: rgba(255, 255, 255, 0.2);
   margin: 16px 24px 16px 0;
   float: left;
-}
-.ant-layout-content div{
-    margin-top: 18px;
-    margin-bottom: 18px;
-    height: 622px;
 }
 </style>

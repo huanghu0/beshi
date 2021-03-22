@@ -1,13 +1,10 @@
 package com.bishe.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.bishe.pojo.User;
+import com.bishe.pojo.Product;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
+//@Mapper
 @Repository
-public interface UserMapper2 extends BaseMapper<User> {
+public interface ProductMapper extends BaseMapper<Product> {
 }

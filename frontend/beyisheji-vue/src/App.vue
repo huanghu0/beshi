@@ -12,8 +12,4 @@ export default {
 </script>
 
 <style>
-#app{
-  width: 1536px;
-  height: 722px;
-}
 </style>
