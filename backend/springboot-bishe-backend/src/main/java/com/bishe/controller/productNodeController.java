@@ -3,6 +3,7 @@ package com.bishe.controller;
 import com.bishe.mapper.ProductNodeMapper;
 import com.bishe.pojo.Product;
 import com.bishe.pojo.Productnode;
+import com.bishe.pojo.Productnodefc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +43,13 @@ public class productNodeController {
         productNodeMapper.updatenoderht(lft);
         addProductNode(productnodenumber,productnumber,parentnodenumber,productNodeName,lft,rht);
         return "添加成功";
+    }
+    @RequestMapping("/selectAllproductnode")
+    public List<Productnode> selectAllproductnode(){
+        return productNodeMapper.selectList(null);
+    }
+    @RequestMapping("/selectAllNodeFc")
+    public List<Productnodefc> selectAllNodeFc(){
+        return productNodeMapper.selectallnodefc();
     }
 }
