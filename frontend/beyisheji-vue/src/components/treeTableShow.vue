@@ -3,28 +3,9 @@
     <a-layout-content>
       <a-layout style="background: #fff">
         <a-layout-sider width="200" style="background: #fff">
-          <a-menu
-            mode="inline"
-            :default-selected-keys="['1']"
-            :default-open-keys="['sub1']"
-            style="height: 100%"
-          >
-            <a-sub-menu key="sub1" title="火车">
-              <a-sub-menu key="sub2" title="火车头">
-                <a-menu-item key="1"> 型号1 </a-menu-item>
-                <a-menu-item key="2"> 型号2 </a-menu-item>
-              </a-sub-menu>
-              <a-sub-menu key="sub3" title="火车箱">
-                <a-menu-item key="3"> 型号1 </a-menu-item>
-                <a-menu-item key="4"> 型号2 </a-menu-item>
-              </a-sub-menu>
-            </a-sub-menu>
-          </a-menu>
+          <a-tree :tree-data="treeData" />
         </a-layout-sider>
         <a-layout-content :style="{ padding: '0 12px', minHeight: '280px' }">
-          <!-- <a-table :columns="columns" :data-source="data" :pagination="false">
-            <a slot="name" slot-scope="text">{{ text }}</a>
-          </a-table> -->
           <el-table
             :data="tableData"
             style="width: 100%; margin-bottom: 20px"
@@ -94,8 +75,24 @@ export default {
           rht: 2,
         },
       ],
+      treeData: [
+        {
+          title: "火车",
+          key: "HC0001-火车-0",
+          children: [
+            { title: "火车头", key: "HC000101-火车头-0-0" },
+            { title: "火车箱", key: "HC000102-火车箱-0-1" },
+          ],
+        },
+        {
+          title: "轮船",
+          key: "LC0001-轮船-0",
+        },
+      ],
     };
   },
+  watch: {},
+  methods: {},
 };
 </script>
 <style  scoped>
