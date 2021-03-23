@@ -1,13 +1,13 @@
 <template>
   <a-form-model>
     <a-form-model-item label="产品模板编号">
-      <a-input />
+      <a-input class="productnumber" />
     </a-form-model-item>
     <a-form-model-item label="产品模板名称">
-      <a-input />
+      <a-input class="productname" />
     </a-form-model-item>
     <a-form-model-item>
-      <a-button type="primary"> Submit </a-button>
+      <a-button type="primary" @click="addproduct"> Submit </a-button>
     </a-form-model-item>
   </a-form-model>
 </template>
@@ -16,6 +16,23 @@ export default {
   name: "createProduct",
   data() {
     return {};
+  },
+  methods: {
+    addproduct: function () {
+      let productnumber = document.querySelector(".productnumber");
+      let productname = document.querySelector(".productname");
+      console.log(productnumber.value, productname.value);
+      this.axios
+        .get(
+          "http://localhost:8081/addproduct/" +
+            productnumber.value +
+            "/" +
+            productname.value
+        )
+        .then((respones) => {
+          console.log(respones);
+        });
+    },
   },
 };
 </script>

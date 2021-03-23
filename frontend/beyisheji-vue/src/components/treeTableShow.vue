@@ -22,80 +22,78 @@
           </a-menu>
         </a-layout-sider>
         <a-layout-content :style="{ padding: '0 12px', minHeight: '280px' }">
-          <a-table :columns="columns" :data-source="data" :pagination="false">
+          <!-- <a-table :columns="columns" :data-source="data" :pagination="false">
             <a slot="name" slot-scope="text">{{ text }}</a>
-          </a-table>
+          </a-table> -->
+          <el-table
+            :data="tableData"
+            style="width: 100%; margin-bottom: 20px"
+            row-key="id"
+            border
+            default-expand-all
+            :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+          >
+            <el-table-column prop="productnodenumber" label="产品节点编号">
+            </el-table-column>
+            <el-table-column prop="productnumber" label="产品编号">
+            </el-table-column>
+            <el-table-column prop="parentnodenumber" label="父节点编号">
+            </el-table-column>
+            <el-table-column prop="productnodename" label="产品节点名称">
+            </el-table-column>
+            <el-table-column prop="lft" label="左值"> </el-table-column>
+            <el-table-column prop="rht" label="右值"> </el-table-column>
+          </el-table>
         </a-layout-content>
       </a-layout>
     </a-layout-content>
   </a-layout>
 </template>
 <script>
-const columns = [
-  {
-    title: "节点编号",
-    dataIndex: "productnodenumber",
-    key: "productnodenumber",
-    ellipsis: true,
-  },
-  {
-    title: "产品编号",
-    dataIndex: "productnumber",
-    key: "productnumber",
-    ellipsis: true,
-  },
-  {
-    title: "父节点编号",
-    dataIndex: "parentnodenumber",
-    key: "parentnodenumber",
-    ellipsis: true,
-  },
-  {
-    title: "节点名称",
-    dataIndex: "productnodename",
-    key: "productnodename",
-    ellipsis: true,
-  },
-  {
-    title: "节点左值",
-    dataIndex: "lft",
-    key: "lft",
-    ellipsis: true,
-  },
-  {
-    title: "节点右值",
-    dataIndex: "rht",
-    key: "rht",
-    ellipsis: true,
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    productnodenumber: "HC0001",
-    productnumber: "HC0001",
-    parentnodenumber: null,
-    productnodename: "火车",
-    lft: 1,
-    rht: 4,
-  },
-  {
-    key: "2",
-    productnodenumber: "HC000101",
-    productnumber: "HC0001",
-    parentnodenumber: "HC0001",
-    productnodename: "火车头",
-    lft: 2,
-    rht: 3,
-  },
-];
 export default {
   name: "treeTableShow",
   data() {
     return {
-      data,
-      columns,
+      tableData: [
+        {
+          id: 1,
+          productnodenumber: "HC0001",
+          productnumber: "HC0001",
+          parentnodenumber: "",
+          productnodename: "火车",
+          lft: 1,
+          rht: 6,
+          children: [
+            {
+              id: 11,
+              productnodenumber: "HC000101",
+              productnumber: "HC0001",
+              parentnodenumber: "HC0001",
+              productnodename: "火车头",
+              lft: 2,
+              rht: 3,
+            },
+            {
+              id: 12,
+              productnodenumber: "HC000102",
+              productnumber: "HC0001",
+              parentnodenumber: "HC0001",
+              productnodename: "火车箱",
+              lft: 4,
+              rht: 5,
+            },
+          ],
+        },
+        {
+          id: 2,
+          productnodenumber: "LC0001",
+          productnumber: "LC0001",
+          parentnodenumber: "",
+          productnodename: "轮船",
+          lft: 1,
+          rht: 2,
+        },
+      ],
     };
   },
 };
