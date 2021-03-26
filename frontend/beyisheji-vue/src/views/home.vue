@@ -7,7 +7,7 @@
         :default-selected-keys="['1']"
         :style="{ lineHeight: '64px' }"
       >
-        <a-menu-item key="1">
+        <!-- <a-menu-item key="1">
           <router-link to="createProduct">创建产品</router-link>
         </a-menu-item>
         <a-menu-item key="2">
@@ -18,10 +18,13 @@
         </a-menu-item>
         <a-menu-item key="4">
           <router-link to="editProductNode">编辑产品节点</router-link>
-        </a-menu-item>
-        <a-menu-item key="5">
+        </a-menu-item> -->
+        <a-menu-item key="1">
           <router-link to="treeTableShow">树状及表格呈现</router-link>
         </a-menu-item>
+        <!-- <a-menu-item key="6">
+          <router-link to="treeComponent">树形组件</router-link>
+        </a-menu-item> -->
       </a-menu>
     </a-layout-header>
     <a-layout-content style="padding: 0 50px">

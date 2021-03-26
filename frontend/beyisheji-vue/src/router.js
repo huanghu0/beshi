@@ -21,9 +21,12 @@ const routes = [
             },{
                 path:'treeTableShow',
                 component: resolve => require(['@/components/treeTableShow.vue'],resolve),
+            },{
+                path:'treeComponent',
+                component: resolve => require(['@/components/treeComponent.vue'],resolve),
             }
         ],
-        redirect: 'createProduct'
+        redirect: 'treeTableShow'
     }
 ];
 export default new VueRouter({
