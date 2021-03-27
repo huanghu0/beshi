@@ -6,9 +6,13 @@
           <a-layout-sider :width="width" :style="{ background: '#fff' }">
             <div class="page-header-index-wide">
               <a-card :bordered="true">
-                <a-button type="primary" @click="addProduct()"
-                  >添加产品节点</a-button
+                <a-button
+                  type="primary"
+                  style="margin: 0 20px 0 0"
+                  @click="addProduct()"
+                  >添加产品</a-button
                 >
+                <a-button type="primary">粘贴产品节点</a-button>
                 <a-tree :treeData="treeData">
                   <template v-slot:custom="item">
                     <a-card
@@ -28,8 +32,15 @@
                           <a-input class="productnodename" />
                         </a-form-model-item>
                         <a-form-model-item :style="{ display: 'block' }">
-                          <a-button type="primary" @click="makeSure(item)">
+                          <a-button
+                            type="primary"
+                            @click="makeSure(item)"
+                            style="margin: 0 20px 0 0"
+                          >
                             添加
+                          </a-button>
+                          <a-button type="primary" @click="cancle(item)">
+                            取消
                           </a-button>
                         </a-form-model-item>
                       </a-form-model-item>
@@ -48,36 +59,64 @@
                           <a-input class="editproductnodename" />
                         </a-form-model-item>
                         <a-form-model-item :style="{ display: 'block' }">
-                          <a-button type="primary" @click="makeEdit(item)">
+                          <a-button
+                            type="primary"
+                            @click="makeEdit(item)"
+                            style="margin: 0 20px 0 0"
+                          >
                             编辑
+                          </a-button>
+                          <a-button type="primary" @click="cancle(item)">
+                            取消
                           </a-button>
                         </a-form-model-item>
                       </a-form-model-item>
                     </a-card>
                     <span v-else>
-                      <span style="margin: 0 40px 0 0">{{
+                      <span style="margin: 0 20px 0 0">{{
                         item.productnodename
                       }}</span>
                       <span
                         class="icon-wrap"
-                        style="margin: 0 20px 0 0"
+                        style="margin: 0 10px 0 0"
                         @click="deletenode(item)"
                       >
                         <a-icon type="delete" theme="twoTone" />
                       </span>
                       <span
                         class="icon-wrap"
-                        style="margin: 0 20px 0 0"
+                        style="margin: 0 10px 0 0"
                         @click="editnode(item)"
                       >
                         <a-icon type="edit" theme="twoTone" />
                       </span>
                       <span
                         class="icon-wrap"
-                        style="margin: 0 20px 0 0"
+                        style="margin: 0 10px 0 0"
                         @click="addnode(item)"
                       >
                         <a-icon type="plus-circle" theme="twoTone" />
+                      </span>
+                      <span
+                        class="icon-wrap"
+                        style="margin: 0 10px 0 0"
+                        title="复制子树"
+                      >
+                        <a-icon type="copy" theme="twoTone" />
+                      </span>
+                      <span
+                        class="icon-wrap"
+                        style="margin: 0 10px 0 0"
+                        title="复制节点"
+                      >
+                        <a-icon type="copyright" theme="twoTone" />
+                      </span>
+                      <span
+                        class="icon-wrap"
+                        style="margin: 0 10px 0 0"
+                        title="粘贴"
+                      >
+                        <a-icon type="diff" theme="twoTone" />
                       </span>
                     </span>
                   </template>
@@ -118,7 +157,10 @@
           <a-input class="productname" />
         </a-form-model-item>
         <a-form-model-item :style="{ display: 'block', width: '500px' }">
-          <a-button type="primary" @click="Commit()"> 新增节点 </a-button>
+          <a-button type="primary" @click="Commit()" style="margin: 0 20px 0 0">
+            新增产品
+          </a-button>
+          <a-button type="primary" @click="cancleProduct()">取消</a-button>
         </a-form-model-item>
       </a-form-model-item>
     </a-card>
@@ -127,7 +169,8 @@
 <script>
 const treeData = [
   {
-    key: "0-0",
+    // key: "0-0",
+    id: 1,
     productnodenumber: "HC0001",
     productnumber: "HC0001",
     parentnodenumber: "",
@@ -159,7 +202,8 @@ const treeData = [
     ],
   },
   {
-    key: "0-1",
+    // key: "0-1",
+    id: 1,
     productnodenumber: "LC0001",
     productnumber: "LC0001",
     parentnodenumber: "",
@@ -171,7 +215,7 @@ const treeData = [
 ];
 const tableData = [
   {
-    id: 1,
+    id: 13,
     productnodenumber: "HC0001",
     productnumber: "HC0001",
     parentnodenumber: "",
@@ -200,7 +244,7 @@ const tableData = [
     ],
   },
   {
-    id: 2,
+    id: 22,
     productnodenumber: "LC0001",
     productnumber: "LC0001",
     parentnodenumber: "",
@@ -332,6 +376,15 @@ export default {
         type: "delete",
       };
       this.searchOption(data, this.treeData, obj);
+    },
+    cancle(data) {
+      data.isAddNode = false;
+      data.dataRef.isAddNode = false;
+      data.isEditNode = false;
+      data.dataRef.isEditNode = false;
+    },
+    cancleProduct() {
+      this.isAddProduct = false;
     },
   },
 };
