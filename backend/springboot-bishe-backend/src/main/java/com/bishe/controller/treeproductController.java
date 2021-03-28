@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bishe.mapper.TreeproductMapper;
 import com.bishe.pojo.Treeproduct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -15,13 +15,14 @@ public class treeproductController {
     private TreeproductMapper treeproductMapper;
     @Autowired
     private Treeproduct treeproduct;
+//    int pid,int parentid,String pname,String model,int count
     @RequestMapping("/addtreeproduct")
-    public String addTreeProduct(int pid,int parentid,String pname,String model,int count){
-        treeproduct.setPid(pid);
-        treeproduct.setParentid(parentid);
-        treeproduct.setPname(pname);
-        treeproduct.setModel(model);
-        treeproduct.setCount(count);
+    public String addTreeProduct(@RequestBody Treeproduct reqtreeproduct){
+        treeproduct.setPid(reqtreeproduct.getPid());
+        treeproduct.setParentid(reqtreeproduct.getParentid());
+        treeproduct.setPname(reqtreeproduct.getPname());
+        treeproduct.setModel(reqtreeproduct.getModel());
+        treeproduct.setCount(reqtreeproduct.getCount());
         try {
             treeproductMapper.insert(treeproduct);
         }catch (Exception e){
@@ -46,7 +47,7 @@ public class treeproductController {
         return "操作成功";
     }
     @RequestMapping("/deletetreeproductlists")
-    public String deleteTreeProductLists(List<Integer> idlist){
+    public String deleteTreeProductLists(@RequestBody List<Integer> idlist){
         try{
             treeproductMapper.deleteBatchIds(idlist);
         }catch (Exception e){
@@ -55,15 +56,23 @@ public class treeproductController {
         return "删除成功";
     }
     @RequestMapping("/updatetreeproduct")
-    public String updateTreeProduct(int pid,String pname){
+    public String updateTreeProduct(@RequestBody Treeproduct reqtreeproduct ){
         try{
             QueryWrapper<Treeproduct> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("pid",pid);
-            treeproduct.setPname(pname);
+            queryWrapper.eq("pid",reqtreeproduct.getPid());
+            treeproduct.setParentid(reqtreeproduct.getParentid());
+            treeproduct.setPname(reqtreeproduct.getPname());
+            treeproduct.setModel(reqtreeproduct.getModel());
+            treeproduct.setCount(reqtreeproduct.getCount());
             treeproductMapper.update(treeproduct,queryWrapper);
         }catch (Exception e){
             return "更新失败";
         }
         return "更新成功";
+    }
+    @RequestMapping("/selectbyid")
+    public Treeproduct selectById(int id)
+    {
+        return treeproductMapper.selectById(id);
     }
 }

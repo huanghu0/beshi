@@ -13,7 +13,7 @@
                   >添加产品</a-button
                 >
                 <a-button type="primary">粘贴产品节点</a-button>
-                <a-tree :treeData="treeData">
+                <a-tree :treeData="treeData" @select="onSelect">
                   <template v-slot:custom="item">
                     <a-card
                       :bordered="true"
@@ -23,13 +23,16 @@
                     >
                       <a-form-model-item
                         layout="inline"
-                        :style="{ width: '500px' }"
+                        :style="{ width: '800px' }"
                       >
-                        <a-form-model-item label="产品节点编号">
-                          <a-input class="productnodenumber" />
+                        <a-form-model-item label="产品名称">
+                          <a-input class="pnameaddnode" />
                         </a-form-model-item>
-                        <a-form-model-item label="产品节点名称">
-                          <a-input class="productnodename" />
+                        <a-form-model-item label="产品模型">
+                          <a-input class="modeladdnode" />
+                        </a-form-model-item>
+                        <a-form-model-item label="所需数量">
+                          <a-input class="countaddnode" />
                         </a-form-model-item>
                         <a-form-model-item :style="{ display: 'block' }">
                           <a-button
@@ -53,10 +56,16 @@
                     >
                       <a-form-model-item
                         layout="inline"
-                        :style="{ width: '300px' }"
+                        :style="{ width: '800px' }"
                       >
-                        <a-form-model-item label="产品节点名称">
-                          <a-input class="editproductnodename" />
+                        <a-form-model-item label="产品名称">
+                          <a-input class="pnameeditnode" />
+                        </a-form-model-item>
+                        <a-form-model-item label="产品模型">
+                          <a-input class="modeleditnode" />
+                        </a-form-model-item>
+                        <a-form-model-item label="所需数量">
+                          <a-input class="counteditnode" />
                         </a-form-model-item>
                         <a-form-model-item :style="{ display: 'block' }">
                           <a-button
@@ -73,12 +82,11 @@
                       </a-form-model-item>
                     </a-card>
                     <span v-else>
-                      <span style="margin: 0 20px 0 0">{{
-                        item.productnodename
-                      }}</span>
+                      <span style="margin: 0 20px 0 0">{{ item.pname }}</span>
                       <span
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
+                        title="删除子节点"
                         @click="deletenode(item)"
                       >
                         <a-icon type="delete" theme="twoTone" />
@@ -86,6 +94,7 @@
                       <span
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
+                        title="编辑子节点"
                         @click="editnode(item)"
                       >
                         <a-icon type="edit" theme="twoTone" />
@@ -93,6 +102,7 @@
                       <span
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
+                        title="添加子节点"
                         @click="addnode(item)"
                       >
                         <a-icon type="plus-circle" theme="twoTone" />
@@ -128,21 +138,17 @@
             <el-table
               :data="tableData"
               style="width: 100%; margin-bottom: 20px"
-              row-key="id"
+              row-key="pid"
               border
               default-expand-all
               :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
             >
-              <el-table-column prop="productnodenumber" label="产品节点编号">
+              <el-table-column prop="pid" label="产品id"> </el-table-column>
+              <el-table-column prop="parentid" label="父节点id">
               </el-table-column>
-              <el-table-column prop="productnumber" label="产品编号">
-              </el-table-column>
-              <el-table-column prop="parentnodenumber" label="父节点编号">
-              </el-table-column>
-              <el-table-column prop="productnodename" label="产品节点名称">
-              </el-table-column>
-              <el-table-column prop="lft" label="左值"> </el-table-column>
-              <el-table-column prop="rht" label="右值"> </el-table-column>
+              <el-table-column prop="pname" label="产品名称"> </el-table-column>
+              <el-table-column prop="model" label="产品型号"> </el-table-column>
+              <el-table-column prop="count" label="所需数量"> </el-table-column>
             </el-table>
           </a-layout-content>
         </a-layout>
@@ -150,15 +156,19 @@
     </a-layout>
     <a-card :bordered="true" :style="{ zIndex: 1 }" v-if="isAddProduct">
       <a-form-model-item layout="inline">
-        <a-form-model-item label="产品编号">
-          <a-input class="productnumber" />
-        </a-form-model-item>
         <a-form-model-item label="产品名称">
-          <a-input class="productname" />
+          <a-input class="pnameaddproduct" />
         </a-form-model-item>
+        <a-form-model-item label="产品模型">
+          <a-input class="modeladdproduct" />
+        </a-form-model-item>
+        <a-form-model-item label="所需数量">
+          <a-input class="countaddproduct" />
+        </a-form-model-item>
+
         <a-form-model-item :style="{ display: 'block', width: '500px' }">
           <a-button type="primary" @click="Commit()" style="margin: 0 20px 0 0">
-            新增产品
+            添加产品
           </a-button>
           <a-button type="primary" @click="cancleProduct()">取消</a-button>
         </a-form-model-item>
@@ -167,119 +177,43 @@
   </div>
 </template>
 <script>
-const treeData = [
-  {
-    // key: "0-0",
-    id: 1,
-    productnodenumber: "HC0001",
-    productnumber: "HC0001",
-    parentnodenumber: "",
-    productnodename: "火车",
-    scopedSlots: { title: "custom" },
-    isAddNode: false,
-    isEditNode: false,
-    children: [
-      {
-        key: "0-0-0",
-        productnodenumber: "HC000101",
-        productnumber: "HC0001",
-        parentnodenumber: "HC0001",
-        productnodename: "火车头",
-        scopedSlots: { title: "custom" },
-        isAddNode: false,
-        isEditNode: false,
-      },
-      {
-        key: "0-0-1",
-        productnodenumber: "HC000102",
-        productnumber: "HC0001",
-        parentnodenumber: "HC0001",
-        productnodename: "火车箱",
-        scopedSlots: { title: "custom" },
-        isAddNode: false,
-        isEditNode: false,
-      },
-    ],
-  },
-  {
-    // key: "0-1",
-    id: 1,
-    productnodenumber: "LC0001",
-    productnumber: "LC0001",
-    parentnodenumber: "",
-    productnodename: "轮船",
-    scopedSlots: { title: "custom" },
-    isAddNode: false,
-    isEditNode: false,
-  },
-];
-const tableData = [
-  {
-    id: 13,
-    productnodenumber: "HC0001",
-    productnumber: "HC0001",
-    parentnodenumber: "",
-    productnodename: "火车",
-    lft: 1,
-    rht: 6,
-    children: [
-      {
-        id: 11,
-        productnodenumber: "HC000101",
-        productnumber: "HC0001",
-        parentnodenumber: "HC0001",
-        productnodename: "火车头",
-        lft: 2,
-        rht: 3,
-      },
-      {
-        id: 12,
-        productnodenumber: "HC000102",
-        productnumber: "HC0001",
-        parentnodenumber: "HC0001",
-        productnodename: "火车箱",
-        lft: 4,
-        rht: 5,
-      },
-    ],
-  },
-  {
-    id: 22,
-    productnodenumber: "LC0001",
-    productnumber: "LC0001",
-    parentnodenumber: "",
-    productnodename: "轮船",
-    lft: 1,
-    rht: 2,
-  },
-];
 export default {
   name: "treeTableShow",
   data() {
     return {
-      tableData: tableData,
-      treeData: treeData,
+      tableData: [],
+      treeData: [],
       isAddProduct: false,
       width: 300,
+      deledata: [],
     };
   },
   watch: {},
   methods: {
+    //验证输入的字符串是否是数字
+    checkNumber(theObj) {
+      var reg = /^[0-9]+.?[0-9]*$/;
+      if (reg.test(theObj)) {
+        return true;
+      }
+      return false;
+    },
     // 递归查找
     searchOption(option, arr, obj) {
       console.log(option, arr);
       for (let s = 0; s < arr.length; s++) {
-        console.log(arr[s].key, option.key);
-        if (arr[s].key === option.key) {
+        if (arr[s].pid === option.pid) {
           if (obj.type === "delete") {
-            arr.splice(s, 1);
+            this.deledata = arr.splice(s, 1)[0];
           } else if (obj.type === "add") {
             if (!arr[s].children) {
               this.$set(arr[s], "children", []);
             }
             arr[s].children.push(obj.newNode);
           } else {
-            arr[s].productnodename = obj.productnodename;
+            arr[s].pname = obj.pname;
+            arr[s].model = obj.model;
+            arr[s].count = obj.count;
           }
           break;
         } else if (arr[s].children && arr[s].children.length > 0) {
@@ -290,17 +224,68 @@ export default {
         }
       }
     },
+    //多叉树的深度遍历
+    dfsTree(data, idlist) {
+      if (!data) {
+        return;
+      }
+      idlist.push(data.pid);
+      if (data.children && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+          this.dfsTree(data.children[i], idlist);
+        }
+      }
+    },
     editnode(data) {
       data.isEditNode = true;
       data.dataRef.isEditNode = true;
+      console.log(data);
     },
     makeEdit(data) {
-      let productnodename = document.querySelector(".editproductnodename")
-        .value;
+      console.log(data);
+      let pid = data.pid,
+        parentid = data.parentid,
+        pname = null,
+        model = null,
+        count = null;
+      pname =
+        document.querySelector(".pnameeditnode").value === ""
+          ? data.pname
+          : document.querySelector(".pnameeditnode").value;
+      model =
+        document.querySelector(".modeleditnode").value === ""
+          ? data.model
+          : document.querySelector(".modeleditnode").value;
+      count =
+        document.querySelector(".counteditnode").value === ""
+          ? data.count
+          : parseInt(document.querySelector(".counteditnode").value);
+
       let obj = {
         type: "edit",
-        productnodename,
+        pname,
+        model,
+        count,
       };
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/updatetreeproduct",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify({
+          pid,
+          parentid,
+          pname,
+          model,
+          count,
+        }),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       this.searchOption(data, this.treeData, obj);
       data.isEditNode = false;
       data.dataRef.isEditNode = false;
@@ -312,39 +297,57 @@ export default {
     },
     makeSure(data) {
       console.log(data);
-      let productnodenumber = document.querySelector(".productnodenumber")
-          .value,
-        productnumber = data.productnumber,
-        parentnodenumber = data.productnodenumber,
-        productnodename = document.querySelector(".productnodename").value;
-      // if (!data.dataRef.children) {
-      //   this.$set(data.dataRef, "children", []);
-      // }
-
-      let key = data.key + "-";
-      if (!data.children) {
-        key += "0";
+      let pid = null,
+        parentid = null,
+        pname = null,
+        model = null,
+        count = null;
+      parentid = data.pid;
+      pname = document.querySelector(".pnameaddnode").value;
+      model = document.querySelector(".modeladdnode").value;
+      count = document.querySelector(".countaddnode").value;
+      if (!this.checkNumber(count)) {
+        alert("所需数量需要输入数字，输入个数不正确!");
+        return;
+      }
+      if (!data.children || data.children.length === 0) {
+        pid = data.pid * 10;
       } else {
-        let lastIndex = data.children.length - 1;
-        let lastIndexkey = data.children[lastIndex].key.split("-").pop();
-        key += parseInt(lastIndexkey) + 1;
+        pid = data.children[data.children.length - 1].pid + 1;
       }
       let newNode = {
-        key,
-        productnodenumber,
-        productnumber,
-        parentnodenumber,
-        productnodename,
+        pid,
+        parentid,
+        pname,
+        model,
+        count: parseInt(count),
+        scopedSlots: { title: "custom" },
         isAddNode: false,
         isEditNode: false,
-        scopedSlots: { title: "custom" },
       };
-      let obj = {
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/addtreeproduct",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify({
+          pid,
+          parentid,
+          pname,
+          model,
+          count: parseInt(count),
+        }),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.searchOption(data, this.treeData, {
         type: "add",
         newNode,
-      };
-      // data.dataRef.children.push(newNode);
-      this.searchOption(data, this.treeData, obj);
+      });
       data.dataRef.isAddNode = false;
       data.isAddNode = false;
     },
@@ -352,23 +355,51 @@ export default {
       this.isAddProduct = true;
     },
     Commit() {
-      let productnumber = document.querySelector(".productnumber").value,
-        productname = document.querySelector(".productname").value;
-      if (this.treeData === null) {
-        this.treeData = [];
+      let pid = null,
+        pname = document.querySelector(".pnameaddproduct").value,
+        model = document.querySelector(".modeladdproduct").value,
+        count = document.querySelector(".countaddproduct").value;
+      if (!this.checkNumber(count)) {
+        alert("所需数量需要输入数字，输入个数不正确!");
+        return;
       }
-      let key = "0-" + this.treeData.length;
+      if (this.treeData.length === 0) {
+        pid = 10;
+      } else {
+        pid = this.treeData[this.treeData.length - 1].pid + 1;
+      }
       let newProdct = {
-        key,
-        productnodenumber: productnumber,
-        productnumber,
-        parentnodenumber: "",
-        productnodename: productname,
+        pid,
+        parentid: 1,
+        pname,
+        model,
+        count: parseInt(count),
         scopedSlots: { title: "custom" },
-        isShow: false,
+        isAddNode: false,
+        isEditNode: false,
       };
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/addtreeproduct",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify({
+          pid,
+          parentid: 1,
+          pname,
+          model,
+          count: parseInt(count),
+        }),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       this.treeData.push(newProdct);
       this.isAddProduct = false;
+      //console.log(this.treeData);
     },
     deletenode(data) {
       console.log(data);
@@ -376,6 +407,23 @@ export default {
         type: "delete",
       };
       this.searchOption(data, this.treeData, obj);
+      console.log(this.deledata);
+      let idlist = [];
+      this.dfsTree(this.deledata, idlist);
+      console.log(idlist);
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/deletetreeproductlists",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify(idlist),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     cancle(data) {
       data.isAddNode = false;
@@ -386,6 +434,39 @@ export default {
     cancleProduct() {
       this.isAddProduct = false;
     },
+    onSelect(selectedKeys, e) {
+      console.log(selectedKeys);
+      console.log(e);
+      console.log(e.node.dataRef);
+      this.tableData = [];
+      this.tableData.push(e.node.dataRef);
+    },
+  },
+  mounted() {
+    function deep(data) {
+      for (var key in data) {
+        if (typeof data[key] == "object") {
+          data.isAddNode = false;
+          data.isEditNode = false;
+          data.scopedSlots = { title: "custom" };
+          deep(data[key]);
+        }
+      }
+    }
+    this.axios
+      .get("http://localhost:8081/selectalltreeproductchildren")
+      .then((result) => {
+        console.log(result);
+        deep(result.data);
+        for (let i = 0; i < result.data.children.length; i++) {
+          this.treeData.push(result.data.children[i]);
+        }
+        this.tableData = this.treeData;
+        console.log(this.tableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

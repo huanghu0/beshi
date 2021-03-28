@@ -17,7 +17,7 @@ new Vue({
   render: h => h(App),
   router,
   store,
-  mounted(){
-    console.log(this.axios);
-  }
+  // mounted(){
+  //   console.log(this.axios);
+  // }
 }).$mount('#app')
