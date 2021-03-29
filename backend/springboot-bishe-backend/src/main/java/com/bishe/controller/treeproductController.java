@@ -35,9 +35,9 @@ public class treeproductController {
         return treeproductMapper.selectList(null);
     }
     @RequestMapping("/addtreeproductlists")
-    public String addTreeProductLists(List<Treeproduct> tlist){
+    public String addTreeProductLists(@RequestBody List<Treeproduct> treelist){
         for (Treeproduct t:
-             tlist) {
+             treelist) {
             try {
                 treeproductMapper.insert(t);
             }catch (Exception e){

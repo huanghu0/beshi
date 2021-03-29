@@ -12,7 +12,9 @@
                   @click="addProduct()"
                   >添加产品</a-button
                 >
-                <a-button type="primary">粘贴产品节点</a-button>
+                <a-button type="primary" @click="pasteproduct()"
+                  >粘贴产品节点</a-button
+                >
                 <a-tree :treeData="treeData" @select="onSelect">
                   <template v-slot:custom="item">
                     <a-card
@@ -111,6 +113,7 @@
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
                         title="复制子树"
+                        @click="copytree(item)"
                       >
                         <a-icon type="copy" theme="twoTone" />
                       </span>
@@ -118,6 +121,7 @@
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
                         title="复制节点"
+                        @click="copynode(item)"
                       >
                         <a-icon type="copyright" theme="twoTone" />
                       </span>
@@ -125,6 +129,7 @@
                         class="icon-wrap"
                         style="margin: 0 10px 0 0"
                         title="粘贴"
+                        @click="pastetree(item)"
                       >
                         <a-icon type="diff" theme="twoTone" />
                       </span>
@@ -186,6 +191,7 @@ export default {
       isAddProduct: false,
       width: 300,
       deledata: [],
+      copydata: {},
     };
   },
   watch: {},
@@ -210,7 +216,10 @@ export default {
               this.$set(arr[s], "children", []);
             }
             arr[s].children.push(obj.newNode);
+          } else if (obj.type === "copy") {
+            this.copydata = arr[s];
           } else {
+            //编辑
             arr[s].pname = obj.pname;
             arr[s].model = obj.model;
             arr[s].count = obj.count;
@@ -233,6 +242,26 @@ export default {
       if (data.children && data.children.length > 0) {
         for (let i = 0; i < data.children.length; i++) {
           this.dfsTree(data.children[i], idlist);
+        }
+      }
+    },
+    dfsTreeId(data, parentid, id, treelist) {
+      if (!data) {
+        return;
+      }
+      console.log(data);
+      data.pid = parentid * 10 + id;
+      data.parentid = parentid;
+      treelist.push({
+        pid: data.pid,
+        parentid: data.parentid,
+        pname: data.pname,
+        model: data.model,
+        count: data.count,
+      });
+      if (data.children && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+          this.dfsTreeId(data.children[i], data.pid, i, treelist);
         }
       }
     },
@@ -440,6 +469,82 @@ export default {
       console.log(e.node.dataRef);
       this.tableData = [];
       this.tableData.push(e.node.dataRef);
+    },
+    pasteproduct() {
+      console.log("复制产品节点");
+      let treelist = [];
+      let id = 0;
+      if (this.treeData.length > 0) {
+        id = (this.treeData[this.treeData.length - 1].pid % 10) + 1;
+      }
+      this.dfsTreeId(this.copydata, 1, id, treelist);
+      console.log(this.copydata);
+      console.log(treelist);
+      this.treeData.push(this.copydata);
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/addtreeproductlists",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify(treelist),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    copytree(data) {
+      console.log(data);
+      console.log("复制子树");
+      let obj = { type: "copy" };
+      this.searchOption(data, this.treeData, obj);
+      console.log(this.copydata);
+    },
+    copynode(data) {
+      console.log(data);
+      console.log("复制节点");
+      this.copydata = {
+        pid: data.pid,
+        parentid: data.parentid,
+        pname: data.pname,
+        model: data.model,
+        count: data.count,
+        scopedSlots: { title: "custom" },
+      };
+      console.log(this.copydata);
+    },
+    pastetree(data) {
+      // console.log(data);
+      console.log("粘贴节点");
+      let treelist = [];
+      let id = 0;
+      // console.log(this.copydata);
+      if (data.children && data.children.length > 0) {
+        id = (data.children[data.children.length - 1].pid % 10) + 1;
+      }
+      this.dfsTreeId(this.copydata, data.pid, id, treelist);
+      console.log(this.copydata);
+      let obj = {
+        type: "add",
+        newNode: this.copydata,
+      };
+      this.searchOption(data, this.treeData, obj);
+      console.log(treelist);
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/addtreeproductlists",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify(treelist),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   mounted() {
