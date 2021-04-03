@@ -20,6 +20,9 @@
           <router-link to="editProductNode">编辑产品节点</router-link>
         </a-menu-item> -->
         <a-menu-item key="1">
+          <router-link to="dictionary">产品字典</router-link>
+        </a-menu-item>
+        <a-menu-item key="2">
           <router-link to="treeTableShow">树状及表格呈现</router-link>
         </a-menu-item>
         <!-- <a-menu-item key="6">
