@@ -1,5 +1,5 @@
 <template>
-  <div class="dictionary">
+  <div class="dictionary" :style="{ position: 'relative' }">
     <a-layout>
       <a-layout-sider width="200" style="background: #fff">
         <a-button
@@ -96,20 +96,21 @@
         </a-layout-content>
       </a-layout>
     </a-layout>
-    <a-card :bordered="true" :style="{ zIndex: 1 }" v-if="isAdd">
+    <a-card
+      :bordered="true"
+      :style="{ zIndex: 1, position: 'absolute', top: '0px', left: '200px' }"
+      v-if="isAdd"
+    >
       <a-form-model-item layout="inline">
-        <a-form-model-item label="字典id">
-          <a-input class="id" />
-        </a-form-model-item>
         <a-form-model-item label="产品名称">
-          <a-input class="name" />
+          <a-input class="dname" />
         </a-form-model-item>
         <a-form-model-item label="产品描述">
-          <a-input class="describe" />
+          <a-input class="represent" />
         </a-form-model-item>
         <a-form-model-item :style="{ display: 'block', width: '500px' }">
           <a-button type="primary" @click="Commit()" style="margin: 0 20px 0 0">
-            添加产品
+            添加
           </a-button>
           <a-button type="primary" @click="cancleProduct()">取消</a-button>
         </a-form-model-item>
@@ -118,72 +119,89 @@
   </div>
 </template>
 <script>
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
+// const data = [
+//   {
+//     key: 1,
+//     name: "John Brown",
+//     describe: "New York No. 1 Lake Park",
+//   },
+//   {
+//     key: 2,
+//     name: "Joe Black",
+//     describe: "London No. 1 Lake Park",
+//   },
+//   {
+//     key: 3,
+//     name: "Jim Green",
+//     describe: "Sidney No. 1 Lake Park",
+//   },
+//   {
+//     key: 4,
+//     name: "Jim Red",
+//     describe: "London No. 2 Lake Park",
+//   },
+//   {
+//     key: 5,
+//     name: "John Brown",
+//     describe: "New York No. 1 Lake Park",
+//   },
+//   {
+//     key: 6,
+//     name: "Joe Black",
+//     describe: "London No. 1 Lake Park",
+//   },
+//   {
+//     key: 7,
+//     name: "Jim Green",
+//     describe: "Sidney No. 1 Lake Park",
+//   },
+//   {
+//     key: 8,
+//     name: "Jim Red",
+//     describe: "London No. 2 Lake Park",
+//   },
+//   {
+//     key: 9,
+//     name: "John Brown",
+//     describe: "New York No. 1 Lake Park",
+//   },
+//   {
+//     key: 10,
+//     name: "Joe Black",
+//     describe: "London No. 1 Lake Park",
+//   },
+//   {
+//     key: 11,
+//     name: "Jim Green",
+//     describe: "Sidney No. 1 Lake Park",
+//   },
+//   {
+//     key: 12,
+//     name: "Jim Red",
+//     describe: "London No. 2 Lake Park",
+//   },
+// ];
 export default {
   name: "dictionary",
   data() {
     return {
       isAdd: false,
-      data,
+      data: null,
       searchText: "",
       searchInput: null,
       searchedColumn: "",
       columns: [
         {
-          title: "Name",
-          dataIndex: "name",
-          key: "name",
+          title: "Id",
+          dataIndex: "key",
+          key: "key",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.name.toString().toLowerCase().includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              }, 0);
-            }
-          },
-        },
-        {
-          title: "Age",
-          dataIndex: "age",
-          key: "age",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender",
-          },
-          onFilter: (value, record) =>
-            record.age.toString().toLowerCase().includes(value.toLowerCase()),
+            record.key.toString().toLowerCase().includes(value.toLowerCase()),
           onFilterDropdownVisibleChange: (visible) => {
             if (visible) {
               setTimeout(() => {
@@ -193,16 +211,35 @@ export default {
           },
         },
         {
-          title: "Address",
-          dataIndex: "address",
-          key: "address",
+          title: "Name",
+          dataIndex: "dname",
+          key: "dname",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.address
+            record.dname.toString().toLowerCase().includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              }, 0);
+            }
+          },
+        },
+        {
+          title: "Represent",
+          dataIndex: "represent",
+          key: "represent",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.represent
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -222,6 +259,28 @@ export default {
       this.isAdd = true;
     },
     Commit() {
+      let dname = document.querySelector(".dname").value;
+      let represent = document.querySelector(".represent").value;
+      console.log(dname, represent);
+      let key = this.data.length + 1;
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/adddictionary",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        data: JSON.stringify({
+          key,
+          dname,
+          represent,
+        }),
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.data.push({ key, dname, represent });
       this.isAdd = false;
     },
     cancleProduct() {
@@ -237,6 +296,17 @@ export default {
       clearFilters();
       this.searchText = "";
     },
+  },
+  mounted() {
+    this.axios
+      .get("http://localhost:8081/selectalldictionary")
+      .then((result) => {
+        console.log(result);
+        this.data = result.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="treeTableShow">
+  <div class="treeTableShow" :style="{ position: 'relative' }">
     <a-layout id="components-layout-demo-top-side">
       <a-layout-content>
         <a-layout style="background: #fff">
@@ -159,7 +159,11 @@
         </a-layout>
       </a-layout-content>
     </a-layout>
-    <a-card :bordered="true" :style="{ zIndex: 1 }" v-if="isAddProduct">
+    <a-card
+      :bordered="true"
+      :style="{ zIndex: 1, position: 'absolute', top: '0px', left: '200px' }"
+      v-if="isAddProduct"
+    >
       <a-form-model-item layout="inline">
         <a-form-model-item label="产品名称">
           <a-input class="pnameaddproduct" />
@@ -298,24 +302,47 @@ export default {
       };
       this.axios({
         baseURL: "http://localhost:8081/",
-        url: "/updatetreeproduct",
-        method: "post",
+        url: "/selectByDname",
+        method: "get",
         headers: { "Content-Type": "application/json;charset=utf-8" },
-        data: JSON.stringify({
-          pid,
-          parentid,
-          pname,
-          model,
-          count,
-        }),
+        params: {
+          dname: pname,
+        },
       })
         .then((result) => {
           console.log(result);
+          let len = null;
+          len = result.data.length;
+          if (len === 0) {
+            alert("你编辑后的产品在字典中不存在,请在字典中添加它");
+            return;
+          } else {
+            this.axios({
+              baseURL: "http://localhost:8081/",
+              url: "/updatetreeproduct",
+              method: "post",
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+              data: JSON.stringify({
+                pid,
+                parentid,
+                pname,
+                model,
+                count,
+              }),
+            })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            this.searchOption(data, this.treeData, obj);
+          }
         })
         .catch((err) => {
           console.log(err);
         });
-      this.searchOption(data, this.treeData, obj);
+
       data.isEditNode = false;
       data.dataRef.isEditNode = false;
     },
@@ -325,6 +352,7 @@ export default {
       data.dataRef.isAddNode = true;
     },
     makeSure(data) {
+      console.log("---------------");
       console.log(data);
       let pid = null,
         parentid = null,
@@ -356,27 +384,50 @@ export default {
       };
       this.axios({
         baseURL: "http://localhost:8081/",
-        url: "/addtreeproduct",
-        method: "post",
+        url: "/selectByDname",
+        method: "get",
         headers: { "Content-Type": "application/json;charset=utf-8" },
-        data: JSON.stringify({
-          pid,
-          parentid,
-          pname,
-          model,
-          count: parseInt(count),
-        }),
+        params: {
+          dname: pname,
+        },
       })
         .then((result) => {
           console.log(result);
+          let len = null;
+          len = result.data.length;
+          if (len === 0) {
+            alert("你添加的产品在字典中不存在,请在字典中添加它");
+            return;
+          } else {
+            this.axios({
+              baseURL: "http://localhost:8081/",
+              url: "/addtreeproduct",
+              method: "post",
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+              data: JSON.stringify({
+                pid,
+                parentid,
+                pname,
+                model,
+                count: parseInt(count),
+              }),
+            })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            this.searchOption(data, this.treeData, {
+              type: "add",
+              newNode,
+            });
+          }
         })
         .catch((err) => {
           console.log(err);
         });
-      this.searchOption(data, this.treeData, {
-        type: "add",
-        newNode,
-      });
+
       data.dataRef.isAddNode = false;
       data.isAddNode = false;
     },
@@ -409,24 +460,48 @@ export default {
       };
       this.axios({
         baseURL: "http://localhost:8081/",
-        url: "/addtreeproduct",
-        method: "post",
+        url: "/selectByDname",
+        method: "get",
         headers: { "Content-Type": "application/json;charset=utf-8" },
-        data: JSON.stringify({
-          pid,
-          parentid: 1,
-          pname,
-          model,
-          count: parseInt(count),
-        }),
+        params: {
+          dname: pname,
+        },
       })
         .then((result) => {
           console.log(result);
+          let len = null;
+          len = result.data.length;
+          if (len === 0) {
+            alert("你添加的产品在字典中不存在,请在字典中添加它");
+            return;
+          } else {
+            this.axios({
+              baseURL: "http://localhost:8081/",
+              url: "/addtreeproduct",
+              method: "post",
+              headers: { "Content-Type": "application/json;charset=utf-8" },
+              data: JSON.stringify({
+                pid,
+                parentid: 1,
+                pname,
+                model,
+                count: parseInt(count),
+              }),
+            })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            this.treeData.push(newProdct);
+          }
         })
         .catch((err) => {
           console.log(err);
         });
-      this.treeData.push(newProdct);
+      //console.log(len);
+
       this.isAddProduct = false;
       //console.log(this.treeData);
     },
