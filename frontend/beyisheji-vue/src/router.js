@@ -27,6 +27,9 @@ const routes = [
             },{
                 path:'dictionary',
                 component: resolve => require(['@/components/dictionary.vue'],resolve),
+            },{
+                path:'productmodel',
+                component:resolve => require(['@/components/productmodel.vue'],resolve)
             }
         ],
         redirect: 'treeTableShow'

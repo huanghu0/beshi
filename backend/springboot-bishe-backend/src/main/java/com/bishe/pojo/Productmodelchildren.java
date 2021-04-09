@@ -13,21 +13,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Treeproductchildren implements Serializable {
-    private int pid;
+public class Productmodelchildren implements Serializable {
+    private int pnum;
     private int parentid;
     private String pname;
     private String model;
     private int count;
-    private int originid;
-    private List<Treeproductchildren> children = new ArrayList<>();
-    public Treeproductchildren(int pid,int parentid,String pname,String model,int count,int originid){
-        this.pid = pid;
+    private List<Productmodelchildren> children = new ArrayList<>();
+    public Productmodelchildren(int pnum,int parentid,String pname,String model,int count){
+        this.pnum = pnum;
         this.parentid = parentid;
         this.pname = pname;
         this.model = model;
         this.count = count;
-        this.originid = originid;
     }
 }
-

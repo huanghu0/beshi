@@ -119,68 +119,6 @@
   </div>
 </template>
 <script>
-// const data = [
-//   {
-//     key: 1,
-//     name: "John Brown",
-//     describe: "New York No. 1 Lake Park",
-//   },
-//   {
-//     key: 2,
-//     name: "Joe Black",
-//     describe: "London No. 1 Lake Park",
-//   },
-//   {
-//     key: 3,
-//     name: "Jim Green",
-//     describe: "Sidney No. 1 Lake Park",
-//   },
-//   {
-//     key: 4,
-//     name: "Jim Red",
-//     describe: "London No. 2 Lake Park",
-//   },
-//   {
-//     key: 5,
-//     name: "John Brown",
-//     describe: "New York No. 1 Lake Park",
-//   },
-//   {
-//     key: 6,
-//     name: "Joe Black",
-//     describe: "London No. 1 Lake Park",
-//   },
-//   {
-//     key: 7,
-//     name: "Jim Green",
-//     describe: "Sidney No. 1 Lake Park",
-//   },
-//   {
-//     key: 8,
-//     name: "Jim Red",
-//     describe: "London No. 2 Lake Park",
-//   },
-//   {
-//     key: 9,
-//     name: "John Brown",
-//     describe: "New York No. 1 Lake Park",
-//   },
-//   {
-//     key: 10,
-//     name: "Joe Black",
-//     describe: "London No. 1 Lake Park",
-//   },
-//   {
-//     key: 11,
-//     name: "Jim Green",
-//     describe: "Sidney No. 1 Lake Park",
-//   },
-//   {
-//     key: 12,
-//     name: "Jim Red",
-//     describe: "London No. 2 Lake Park",
-//   },
-// ];
 export default {
   name: "dictionary",
   data() {

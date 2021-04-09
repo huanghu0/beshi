@@ -3,7 +3,13 @@
     <a-layout id="components-layout-demo-top-side">
       <a-layout-content>
         <a-layout style="background: #fff">
-          <a-layout-sider :width="width" :style="{ background: '#fff' }">
+          <a-layout-sider
+            :style="{
+              background: '#fff',
+              display: 'inline-block',
+              minWidth: '400px',
+            }"
+          >
             <div class="page-header-index-wide">
               <a-card :bordered="true">
                 <a-button
@@ -133,6 +139,14 @@
                       >
                         <a-icon type="diff" theme="twoTone" />
                       </span>
+                      <span
+                        class="icon-wrap"
+                        style="margin: 0 10px 0 0"
+                        title="添加到产品模板"
+                        @click="addtoproductmodel(item)"
+                      >
+                        <a-icon type="right-circle" theme="twoTone" />
+                      </span>
                     </span>
                   </template>
                 </a-tree>
@@ -154,6 +168,10 @@
               <el-table-column prop="pname" label="产品名称"> </el-table-column>
               <el-table-column prop="model" label="产品型号"> </el-table-column>
               <el-table-column prop="count" label="所需数量"> </el-table-column>
+              <el-table-column
+                prop="originid"
+                label="产品来源id"
+              ></el-table-column>
             </el-table>
           </a-layout-content>
         </a-layout>
@@ -193,7 +211,6 @@ export default {
       tableData: [],
       treeData: [],
       isAddProduct: false,
-      width: 300,
       deledata: [],
       copydata: {},
     };
@@ -210,7 +227,7 @@ export default {
     },
     // 递归查找
     searchOption(option, arr, obj) {
-      console.log(option, arr);
+      //console.log(option, arr);
       for (let s = 0; s < arr.length; s++) {
         if (arr[s].pid === option.pid) {
           if (obj.type === "delete") {
@@ -220,8 +237,19 @@ export default {
               this.$set(arr[s], "children", []);
             }
             arr[s].children.push(obj.newNode);
-          } else if (obj.type === "copy") {
+          } else if (obj.type === "copytree") {
             this.copydata = arr[s];
+            this.copydata.originid = arr[s].parentid;
+          } else if (obj.type === "copy") {
+            this.copydata = {
+              pid: arr[s].pid,
+              parentid: arr[s].parentid,
+              pname: arr[s].pname,
+              model: arr[s].model,
+              count: arr[s].count,
+              originid: arr[s].parentid,
+              scopedSlots: { title: "custom" },
+            };
           } else {
             //编辑
             arr[s].pname = obj.pname;
@@ -253,7 +281,7 @@ export default {
       if (!data) {
         return;
       }
-      console.log(data);
+      //console.log(data);
       data.pid = parentid * 10 + id;
       data.parentid = parentid;
       treelist.push({
@@ -262,6 +290,7 @@ export default {
         pname: data.pname,
         model: data.model,
         count: data.count,
+        originid: data.originid,
       });
       if (data.children && data.children.length > 0) {
         for (let i = 0; i < data.children.length; i++) {
@@ -272,15 +301,16 @@ export default {
     editnode(data) {
       data.isEditNode = true;
       data.dataRef.isEditNode = true;
-      console.log(data);
+      //console.log(data);
     },
     makeEdit(data) {
-      console.log(data);
+      //console.log(data);
       let pid = data.pid,
         parentid = data.parentid,
         pname = null,
         model = null,
-        count = null;
+        count = null,
+        originid = data.originid;
       pname =
         document.querySelector(".pnameeditnode").value === ""
           ? data.pname
@@ -310,7 +340,7 @@ export default {
         },
       })
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           let len = null;
           len = result.data.length;
           if (len === 0) {
@@ -328,37 +358,39 @@ export default {
                 pname,
                 model,
                 count,
+                originid,
               }),
             })
               .then((result) => {
-                console.log(result);
+                //console.log(result);
               })
               .catch((err) => {
-                console.log(err);
+                //console.log(err);
               });
             this.searchOption(data, this.treeData, obj);
           }
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
 
       data.isEditNode = false;
       data.dataRef.isEditNode = false;
     },
     addnode(data) {
-      console.log(data);
+      //console.log(data);
       data.isAddNode = true;
       data.dataRef.isAddNode = true;
     },
     makeSure(data) {
-      console.log("---------------");
-      console.log(data);
+      //console.log("---------------");
+      //console.log(data);
       let pid = null,
         parentid = null,
         pname = null,
         model = null,
-        count = null;
+        count = null,
+        originid = 0;
       parentid = data.pid;
       pname = document.querySelector(".pnameaddnode").value;
       model = document.querySelector(".modeladdnode").value;
@@ -378,6 +410,7 @@ export default {
         pname,
         model,
         count: parseInt(count),
+        originid,
         scopedSlots: { title: "custom" },
         isAddNode: false,
         isEditNode: false,
@@ -392,7 +425,7 @@ export default {
         },
       })
         .then((result) => {
-          console.log(result);
+          //console.log(result);
           let len = null;
           len = result.data.length;
           if (len === 0) {
@@ -409,6 +442,7 @@ export default {
                 parentid,
                 pname,
                 model,
+                originid,
                 count: parseInt(count),
               }),
             })
@@ -438,7 +472,8 @@ export default {
       let pid = null,
         pname = document.querySelector(".pnameaddproduct").value,
         model = document.querySelector(".modeladdproduct").value,
-        count = document.querySelector(".countaddproduct").value;
+        count = document.querySelector(".countaddproduct").value,
+        originid = 0;
       if (!this.checkNumber(count)) {
         alert("所需数量需要输入数字，输入个数不正确!");
         return;
@@ -454,6 +489,7 @@ export default {
         pname,
         model,
         count: parseInt(count),
+        originid,
         scopedSlots: { title: "custom" },
         isAddNode: false,
         isEditNode: false,
@@ -486,6 +522,7 @@ export default {
                 pname,
                 model,
                 count: parseInt(count),
+                originid,
               }),
             })
               .then((result) => {
@@ -506,15 +543,15 @@ export default {
       //console.log(this.treeData);
     },
     deletenode(data) {
-      console.log(data);
+      //console.log(data);
       let obj = {
         type: "delete",
       };
       this.searchOption(data, this.treeData, obj);
-      console.log(this.deledata);
+      //console.log(this.deledata);
       let idlist = [];
       this.dfsTree(this.deledata, idlist);
-      console.log(idlist);
+      //console.log(idlist);
       this.axios({
         baseURL: "http://localhost:8081/",
         url: "/deletetreeproductlists",
@@ -539,22 +576,38 @@ export default {
       this.isAddProduct = false;
     },
     onSelect(selectedKeys, e) {
-      console.log(selectedKeys);
-      console.log(e);
-      console.log(e.node.dataRef);
+      //console.log(selectedKeys);
+      //console.log(e);
+      //console.log(e.node.dataRef);
       this.tableData = [];
       this.tableData.push(e.node.dataRef);
     },
+    copytree(data) {
+      //console.log(data);
+      //console.log("复制子树");
+      let obj = { type: "copytree" };
+      //console.log(this.treeData);
+      this.searchOption(data, this.treeData, obj);
+      //console.log(this.copydata);
+    },
+    copynode(data) {
+      // console.log(data);
+      //console.log("复制节点");
+      let obj = { type: "copy" };
+      //console.log(this.treeData);
+      this.searchOption(data, this.treeData, obj);
+      // console.log(this.copydata);
+    },
     pasteproduct() {
-      console.log("复制产品节点");
+      //console.log("复制产品节点");
       let treelist = [];
       let id = 0;
       if (this.treeData.length > 0) {
         id = (this.treeData[this.treeData.length - 1].pid % 10) + 1;
       }
       this.dfsTreeId(this.copydata, 1, id, treelist);
-      console.log(this.copydata);
-      console.log(treelist);
+      //console.log(this.copydata);
+      //console.log(treelist);
       this.treeData.push(this.copydata);
       this.axios({
         baseURL: "http://localhost:8081/",
@@ -570,29 +623,9 @@ export default {
           console.log(err);
         });
     },
-    copytree(data) {
-      console.log(data);
-      console.log("复制子树");
-      let obj = { type: "copy" };
-      this.searchOption(data, this.treeData, obj);
-      console.log(this.copydata);
-    },
-    copynode(data) {
-      console.log(data);
-      console.log("复制节点");
-      this.copydata = {
-        pid: data.pid,
-        parentid: data.parentid,
-        pname: data.pname,
-        model: data.model,
-        count: data.count,
-        scopedSlots: { title: "custom" },
-      };
-      console.log(this.copydata);
-    },
     pastetree(data) {
       // console.log(data);
-      console.log("粘贴节点");
+      // console.log("粘贴节点");
       let treelist = [];
       let id = 0;
       // console.log(this.copydata);
@@ -600,13 +633,13 @@ export default {
         id = (data.children[data.children.length - 1].pid % 10) + 1;
       }
       this.dfsTreeId(this.copydata, data.pid, id, treelist);
-      console.log(this.copydata);
+      //console.log(this.copydata);
       let obj = {
         type: "add",
         newNode: this.copydata,
       };
       this.searchOption(data, this.treeData, obj);
-      console.log(treelist);
+      //console.log(treelist);
       this.axios({
         baseURL: "http://localhost:8081/",
         url: "/addtreeproductlists",
@@ -616,6 +649,67 @@ export default {
       })
         .then((result) => {
           console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    dfsproductId(data, parentid, id, productmodellist) {
+      if (!data) {
+        return;
+      }
+      //console.log(data);
+      data.pid = parentid * 10 + id;
+      data.parentid = parentid;
+      productmodellist.push({
+        pnum: data.pid,
+        parentid: data.parentid,
+        pname: data.pname,
+        model: data.model,
+        count: data.count,
+      });
+      if (data.children && data.children.length > 0) {
+        for (let i = 0; i < data.children.length; i++) {
+          this.dfsproductId(data.children[i], data.pid, i, productmodellist);
+        }
+      }
+    },
+    addtoproductmodel(data) {
+      let obj = { type: "copytree" };
+      this.searchOption(data, this.treeData, obj);
+      //console.log(this.copydata);
+      let productmodel = null;
+      this.axios
+        .get("http://localhost:8081/selectallproductmodelchildren")
+        .then((result) => {
+          //console.log(result);
+          productmodel = result.data.children;
+          console.log(productmodel);
+          let id = 0;
+          console.log(productmodel.length);
+          if (productmodel.length > 0) {
+            id = (productmodel[productmodel.length - 1].pnum % 10) + 1;
+          }
+          let productmodellist = [];
+          this.dfsproductId(this.copydata, 1, id, productmodellist);
+          //console.log(productmodellist);
+          this.axios({
+            baseURL: "http://localhost:8081/",
+            url: "/addproductmodellists",
+            method: "post",
+            headers: { "Content-Type": "application/json;charset=utf-8" },
+            data: JSON.stringify(productmodellist),
+          })
+            .then((result) => {
+              console.log(result);
+              if (result.status === 200) {
+                alert("添加模板成功,请到产品模板页查看!");
+                this.$router.push({ path: "/productmodel" });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch((err) => {
           console.log(err);
@@ -636,13 +730,13 @@ export default {
     this.axios
       .get("http://localhost:8081/selectalltreeproductchildren")
       .then((result) => {
-        console.log(result);
+        //console.log(result);
         deep(result.data);
         for (let i = 0; i < result.data.children.length; i++) {
           this.treeData.push(result.data.children[i]);
         }
         this.tableData = this.treeData;
-        console.log(this.tableData);
+        //console.log(this.tableData);
       })
       .catch((err) => {
         console.log(err);

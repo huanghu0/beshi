@@ -12,12 +12,11 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Treeproduct implements Serializable {
-    @TableId("pid")
-    private int pid;
+public class Productmodel implements Serializable {
+    @TableId("pnum")
+    private int pnum;
     private int parentid;
     private String pname;
     private String model;
     private int count;
-    private int originid;
 }

@@ -23,7 +23,10 @@
           <router-link to="dictionary">产品字典</router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <router-link to="treeTableShow">树状及表格呈现</router-link>
+          <router-link to="treeTableShow">元结构树</router-link>
+        </a-menu-item>
+        <a-menu-item key="3">
+          <router-link to="productmodel">产品模板</router-link>
         </a-menu-item>
         <!-- <a-menu-item key="6">
           <router-link to="treeComponent">树形组件</router-link>

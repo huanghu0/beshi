@@ -26,7 +26,7 @@ public class treeproductchildrenController {
         List<Treeproductchildren> treeproductchildrenList = new ArrayList<>();
         for (Treeproduct t:
              tlist) {
-            treeproductchildrenList.add(new Treeproductchildren(t.getPid(),t.getParentid(),t.getPname(),t.getModel(),t.getCount()));
+            treeproductchildrenList.add(new Treeproductchildren(t.getPid(),t.getParentid(),t.getPname(),t.getModel(),t.getCount(),t.getOriginid()));
         }
         Treeproductchildren alltreechildren = TreeUtil.getInstance().enquireTree(treeproductchildrenList);
         return JSON.toJSONString(alltreechildren);
