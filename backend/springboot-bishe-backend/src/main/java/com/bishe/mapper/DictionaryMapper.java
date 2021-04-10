@@ -17,4 +17,5 @@ public interface DictionaryMapper extends BaseMapper<Dictionary> {
     public List<Dictionary> selectAllDictionary();
     @Select("select * from dictionary where dname = #{dname}")
     public List<Dictionary> selectByDname(String dname);
+
 }

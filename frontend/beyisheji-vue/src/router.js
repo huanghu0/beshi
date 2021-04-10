@@ -30,9 +30,12 @@ const routes = [
             },{
                 path:'productmodel',
                 component:resolve => require(['@/components/productmodel.vue'],resolve)
+            },{
+                path:'productdetails',
+                component:resolve => require(['@/components/productdetails.vue'],resolve)
             }
         ],
-        redirect: 'treeTableShow'
+        redirect: 'dictionary'
     }
 ];
 export default new VueRouter({

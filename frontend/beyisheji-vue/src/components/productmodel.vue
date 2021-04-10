@@ -1,50 +1,74 @@
 <template>
-  <a-layout>
-    <a-layout-sider width="300" style="background: #fff">
-      <a-tree :tree-data="treeData">
-        <template v-slot:custom="item">
-          <span>{{ item.pname }}</span>
-        </template>
-      </a-tree>
-    </a-layout-sider>
-    <a-layout style="padding: 0 24px 24px">
-      <a-layout-content
-        :style="{
-          background: '#fff',
-          padding: '24px',
-          margin: '20px',
-          minHeight: '280px',
-        }"
-      >
-        <el-table
-          :data="
-            tableData.filter(
-              (data) =>
-                !search ||
-                data.name.toLowerCase().includes(search.toLowerCase())
-            )
-          "
-          style="width: 100%"
-          row-key="pnum"
+  <div class="productmodel" :style="{ position: 'relative' }">
+    <a-layout>
+      <a-layout-sider width="300" style="background: #fff">
+        <a-tree :tree-data="treeData">
+          <template v-slot:custom="item">
+            <span>{{ item.pname }}</span>
+          </template>
+        </a-tree>
+      </a-layout-sider>
+      <a-layout style="padding: 0 24px 24px">
+        <a-layout-content
+          :style="{
+            background: '#fff',
+            padding: '24px',
+            margin: '20px',
+            minHeight: '280px',
+          }"
         >
-          <el-table-column label="编号" prop="pnum"> </el-table-column>
-          <el-table-column label="名称" prop="pname"> </el-table-column>
-          <el-table-column label="模型" prop="model"> </el-table-column>
-          <el-table-column label="数量" prop="count"> </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
-                >Delete</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </a-layout-content>
+          <el-table :data="tableData" style="width: 100%" row-key="pnum">
+            <el-table-column label="编号" prop="pnum"> </el-table-column>
+            <el-table-column label="名称" prop="pname"> </el-table-column>
+            <el-table-column label="模型" prop="model"> </el-table-column>
+            <el-table-column label="数量" prop="count"> </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+                  >Delete</el-button
+                >
+                <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleAdddetails(scope.$index, scope.row)"
+                  >Adddetails</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </a-layout-content>
+      </a-layout>
     </a-layout>
-  </a-layout>
+    <a-card
+      :bordered="true"
+      :style="{
+        width: '800px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginLeft: '-400px',
+        zIndex: 1,
+      }"
+      v-if="isAddDetails"
+    >
+      <el-form label-width="100px">
+        <el-form-item label="产品属性详情">
+          <el-input
+            type="textarea"
+            v-model="details"
+            class="details"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">确定</el-button>
+          <el-button @click="cancel">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </a-card>
+  </div>
 </template>
 <script>
 // const treeData = [
@@ -85,82 +109,8 @@
 //           },
 //         ],
 //       },
-//       {
-//         pname: "0-0-1",
-//         pnum: 1,
-//         model: "***",
-//         count: 10,
-//         scopedSlots: { title: "custom" },
-//         children: [
-//           {
-//             pname: "0-0-1-0",
-//             pnum: 1,
-//             model: "***",
-//             count: 10,
-//             scopedSlots: { title: "custom" },
-//           },
-//           {
-//             pname: "0-0-1-1",
-//             pnum: 1,
-//             model: "***",
-//             count: 10,
-//             scopedSlots: { title: "custom" },
-//           },
-//           {
-//             pname: "0-0-1-2",
-//             pnum: 1,
-//             model: "***",
-//             count: 10,
-//             scopedSlots: { title: "custom" },
-//           },
-//         ],
-//       },
-//       {
-//         pname: "0-0-2",
-//         pnum: 1,
-//         model: "***",
-//         count: 10,
-//         scopedSlots: { title: "custom" },
-//       },
 //     ],
-//   },
-//   {
-//     pname: "0-1",
-//     pnum: 1,
-//     model: "***",
-//     count: 10,
-//     scopedSlots: { title: "custom" },
-//     children: [
-//       {
-//         pname: "0-1-0-0",
-//         pnum: 1,
-//         model: "***",
-//         count: 10,
-//         scopedSlots: { title: "custom" },
-//       },
-//       {
-//         pname: "0-1-0-1",
-//         pnum: 1,
-//         model: "***",
-//         count: 10,
-//         scopedSlots: { title: "custom" },
-//       },
-//       {
-//         pname: "0-1-0-2",
-//         pnum: 1,
-//         model: "***",
-//         count: 10,
-//         scopedSlots: { title: "custom" },
-//       },
-//     ],
-//   },
-//   {
-//     pname: "0-2",
-//     pnum: 1,
-//     model: "***",
-//     count: 10,
-//     scopedSlots: { title: "custom" },
-//   },
+//   }
 // ];
 export default {
   name: "productmodel",
@@ -168,7 +118,10 @@ export default {
     return {
       treeData: [],
       tableData: [],
-      search: "",
+      isAddDetails: false,
+      pname: "",
+      model: "",
+      details: "",
     };
   },
   methods: {
@@ -216,6 +169,37 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    handleAdddetails(index, row) {
+      //console.log(index, row);
+      this.pname = row.pname;
+      this.model = row.model;
+      //console.log(this.pname, this.model);
+      this.isAddDetails = true;
+    },
+    onSubmit() {
+      console.log(this.details);
+      this.axios({
+        baseURL: "http://localhost:8081/",
+        url: "/addproductinstance",
+        method: "post",
+        headers: { "Content-Type": "application/json;charset=utf-8" },
+        params: {
+          pname: this.pname,
+          model: this.model,
+          details: this.details,
+        },
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.isAddDetails = false;
+    },
+    cancel() {
+      this.isAddDetails = false;
     },
   },
   mounted() {

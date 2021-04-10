@@ -4,7 +4,7 @@
       <a-menu
         theme="dark"
         mode="horizontal"
-        :default-selected-keys="['2']"
+        :default-selected-keys="['1']"
         :style="{ lineHeight: '64px' }"
       >
         <!-- <a-menu-item key="1">
@@ -23,11 +23,15 @@
           <router-link to="dictionary">产品字典</router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <router-link to="treeTableShow">元结构树</router-link>
+          <router-link to="treeTableShow">产品元结构树</router-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <router-link to="productmodel">产品模板</router-link>
+          <router-link to="productmodel">产品模板结构树</router-link>
         </a-menu-item>
+        <a-menu-item key="4">
+          <router-link to="productdetails">产品实例</router-link>
+        </a-menu-item>
+
         <!-- <a-menu-item key="6">
           <router-link to="treeComponent">树形组件</router-link>
         </a-menu-item> -->
