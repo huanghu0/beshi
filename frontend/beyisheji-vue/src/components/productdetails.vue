@@ -42,7 +42,7 @@ export default {
     return {
       tableData: [],
       totalData: [],
-      pagesize: 2,
+      pagesize: 5,
       total: null,
       currentpage: 1,
     };
