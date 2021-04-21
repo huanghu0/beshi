@@ -75,4 +75,9 @@ class SpringbootBisheBackendApplicationTests {
         System.out.println(JSON.toJSONString(productmodelchildren));
 
     }
+    @Test
+    void testRandom(){
+        int rs = (int) ((Math.random() * 9 + 1) * Math.pow(10, 8 - 1));
+        System.out.println(rs);
+    }
 }

@@ -4,38 +4,56 @@ Vue.use(VueRouter);
 const routes = [
     {
         path:'/',
+        component:resolve=>require(['@/views/login.vue'],resolve),
+        children:[
+            {
+                path:'accountlogin',
+                component:resolve=>require(['@/components/login/accountLogin.vue'],resolve)
+            },
+            {
+                path:'register',
+                component:resolve=>require(['@/components/login/register.vue'],resolve)
+            },{
+                path:'shortMessageLogin',
+                component:resolve=>require(['@/components/login/shortMessageLogin.vue'],resolve)
+            }
+        ],
+        redirect: 'accountlogin'
+    },
+    {
+        path:'/home',
         component: resolve => require(['@/views/home.vue'],resolve),
         children:[
             {
-                path:'createProduct',
+                path:'/home/createProduct',
                 component: resolve => require(['@/components/createProduct.vue'],resolve),
             },{
-                path:'editProduct',
+                path:'/home/editProduct',
                 component: resolve => require(['@/components/editProduct.vue'],resolve),                
             },{
-                path:'createProductNode',
+                path:'/home/createProductNode',
                 component: resolve => require(['@/components/createProductNode.vue'],resolve),
             },{
-                path:'editProductNode',
+                path:'/home/editProductNode',
                 component: resolve => require(['@/components/editProductNode.vue'],resolve),
             },{
-                path:'treeTableShow',
+                path:'/home/treeTableShow',
                 component: resolve => require(['@/components/treeTableShow.vue'],resolve),
             },{
-                path:'treeComponent',
+                path:'/home/treeComponent',
                 component: resolve => require(['@/components/treeComponent.vue'],resolve),
             },{
-                path:'dictionary',
+                path:'/home/dictionary',
                 component: resolve => require(['@/components/dictionary.vue'],resolve),
             },{
-                path:'productmodel',
+                path:'/home/productmodel',
                 component:resolve => require(['@/components/productmodel.vue'],resolve)
             },{
-                path:'productdetails',
+                path:'/home/productdetails',
                 component:resolve => require(['@/components/productdetails.vue'],resolve)
             }
         ],
-        redirect: 'dictionary'
+        redirect: '/home/dictionary'
     }
 ];
 export default new VueRouter({

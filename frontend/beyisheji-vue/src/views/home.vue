@@ -20,16 +20,16 @@
           <router-link to="editProductNode">编辑产品节点</router-link>
         </a-menu-item> -->
         <a-menu-item key="1">
-          <router-link to="dictionary">产品字典</router-link>
+          <router-link to="/home/dictionary">产品字典</router-link>
         </a-menu-item>
         <a-menu-item key="2">
-          <router-link to="treeTableShow">产品元结构树</router-link>
+          <router-link to="/home/treeTableShow">产品元结构树</router-link>
         </a-menu-item>
         <a-menu-item key="3">
-          <router-link to="productmodel">产品模板结构树</router-link>
+          <router-link to="/home/productmodel">产品模板结构树</router-link>
         </a-menu-item>
         <a-menu-item key="4">
-          <router-link to="productdetails">产品实例</router-link>
+          <router-link to="/home/productdetails">产品实例</router-link>
         </a-menu-item>
 
         <!-- <a-menu-item key="6">
