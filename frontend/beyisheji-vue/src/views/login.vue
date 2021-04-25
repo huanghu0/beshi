@@ -28,7 +28,7 @@ export default {
 <style scoped>
 .login {
   width: 800px;
-  height: 400px;
+  height: 500px;
   border: 1px solid #ccc;
   position: absolute;
   left: 50%;

@@ -9,10 +9,12 @@ import 'ant-design-vue/dist/antd.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+axios.defaults.withCredentials = true;//允许跨域携带cookie信息
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueAxios,axios);
 Vue.use(Antd);
+
 new Vue({
   render: h => h(App),
   router,
