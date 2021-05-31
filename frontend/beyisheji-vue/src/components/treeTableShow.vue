@@ -704,7 +704,7 @@ export default {
               console.log(result);
               if (result.status === 200) {
                 alert("添加模板成功,请到产品模板页查看!");
-                this.$router.push({ path: "/productmodel" });
+                this.$router.push({ path: "/home/productmodel" });
               }
             })
             .catch((err) => {

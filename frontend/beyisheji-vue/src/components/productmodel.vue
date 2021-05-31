@@ -194,7 +194,7 @@ export default {
           console.log(result);
           if (result.status === 200) {
             alert("产品实例添加成功,请到实例页查看！");
-            this.$router.push({ path: "/productdetails" });
+            this.$router.push({ path: "/home/productdetails" });
           }
         })
         .catch((err) => {

@@ -18,7 +18,11 @@
             minHeight: '280px',
           }"
         >
-          <a-table :data-source="data" :columns="columns">
+          <a-table
+            :data-source="data"
+            :columns="columns"
+            :pagination="{ defaultPageSize: 5 }"
+          >
             <div
               slot="filterDropdown"
               slot-scope="{
